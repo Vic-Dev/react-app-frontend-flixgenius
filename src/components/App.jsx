@@ -2,17 +2,26 @@ import React from 'react';
 import AppBody from './AppBody.jsx';
 import Header from './Header.jsx';
 import MovieBox from './MovieBox.jsx';
+import Infinite from 'react-infinite';
+
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
+var _ = require('lodash');
+
+const LIMIT = 6;
 
 class App extends React.Component {
 
-  state = { data: [] };
+  constructor(props) {
+    super(props);
+    this.state = { elements: [], isInfiniteLoading: false};
+    this.getElements = this.getElements.bind(this);
+  }
 
-  getData() {
+  getElements(start, limit, sort, order) {
     var that = this;
-    console.log(that);
-    fetch('http://localhost:3000/')
+    // console.log(that);
+    fetch('http://localhost:3000/flicks?start=' + start + '&limit=' + limit + '&sort=' + sort + '&order=' + order)
     .then(function(response) {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
@@ -21,23 +30,48 @@ class App extends React.Component {
     })
     .then(function(flicks) {
       console.log(flicks)
-      that.setState({data: flicks})
+      that.setState({elements: that.state.elements.concat(flicks)})
     });
   }
 
   componentDidMount() {
-    this.getData();
+    // setInterval(() => {
+      this.getElements(0, LIMIT, 'id', 'asc');
+      // console.log(this);
+      var that = this;
+      // console.log(that);
+    window.addEventListener('scroll', _.debounce(that.handleScroll.bind(that), 500));
+  }
+
+  handleScroll(){
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        // you're at the bottom of the page
+        // console.log("bottom");
+        // console.log(this);
+        const elemLength = this.state.elements.length;
+        this.getElements(elemLength, LIMIT, 'id', 'asc');
+      }
+  }
+
+  elementInfiniteLoad() {
+    return <div className="infinite-list-item">
+    Loading...
+    </div>
   }
 
   render() {
 
-    const movieBoxes = this.state.data.map(val => {
+    const movieBoxes = this.state.elements.map(val => {
       return <MovieBox 
-        key={val.netflix_id} 
+        key={val.id} 
         name={val.title} 
-        // imgUrl={val.box_art} 
+        imgUrl={val.box_art} 
         description={val.netflix_description} 
-        rating={val.imdb_rating} 
+        rating={val.imdb_rating}
+        imdbId={val.imdb_id}
+        netflixId={val.netflix_id}
+        netflixGenres={val.netflix_genres}
+        year={val.year}
       />
     });
 
@@ -57,16 +91,16 @@ class App extends React.Component {
   };
 
   _hideRatings = () => {
-    const newState = this.state.data.filter(val => val.rating > 9);
+    const newState = this.state.elements.filter(val => val.rating > 9);
     this.setState({
-      data: newState,
+      elements: newState,
       filtered: true
     });
   };
 
   _clearFilter = () => {
     this.setState({
-      data: DATA,
+      elements: DATA,
       filtered: false
     });
   };
