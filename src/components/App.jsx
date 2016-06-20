@@ -2,61 +2,42 @@ import React from 'react';
 import AppBody from './AppBody.jsx';
 import Header from './Header.jsx';
 import MovieBox from './MovieBox.jsx';
-
-const DATA = [
-      {
-        id: 1,
-        name: 'The Matrix',
-        imgUrl: 'http://placehold.it/250x250',
-        description: 'This is a movie about stuff',
-        rating: 9.0
-      },
-      {
-        id: 2,
-        name: 'Memento',
-        imgUrl: 'http://placehold.it/250x250',
-        description: 'He forgets things and puts tattoos on his body',
-        rating: 9.5
-      },
-      {
-        id: 3,
-        name: 'Titanic',
-        imgUrl: 'http://placehold.it/250x250',
-        description: 'He forgets things and puts tattoos on his body',
-        rating: 7
-      },
-      {
-        id: 4,
-        name: 'The Lion King',
-        imgUrl: 'http://placehold.it/250x250',
-        description: 'He forgets things and puts tattoos on his body',
-        rating: 9.5
-      },
-      {
-        id: 5,
-        name: 'Godzilla',
-        imgUrl: 'http://placehold.it/250x250',
-        description: 'He forgets things and puts tattoos on his body',
-        rating: 9.5
-      }                        
-    ]
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
 
 class App extends React.Component {
 
-  state = {
-    data: DATA,
-    filtered: false
+  state = { data: [] };
+
+  getData() {
+    var that = this;
+    console.log(that);
+    fetch('http://localhost:3000/')
+    .then(function(response) {
+      if (response.status >= 400) {
+        throw new Error("Bad response from server");
+      }
+      return response.json();
+    })
+    .then(function(flicks) {
+      console.log(flicks)
+      that.setState({data: flicks})
+    });
+  }
+
+  componentDidMount() {
+    this.getData();
   }
 
   render() {
 
     const movieBoxes = this.state.data.map(val => {
       return <MovieBox 
-        key={val.id} 
-        name={val.name} 
-        imgUrl={val.imgUrl} 
-        description={val.description} 
-        rating={val.rating} 
+        key={val.netflix_id} 
+        name={val.title} 
+        // imgUrl={val.box_art} 
+        description={val.netflix_description} 
+        rating={val.imdb_rating} 
       />
     });
 
@@ -74,7 +55,7 @@ class App extends React.Component {
       </div>
     )
   };
-  
+
   _hideRatings = () => {
     const newState = this.state.data.filter(val => val.rating > 9);
     this.setState({
