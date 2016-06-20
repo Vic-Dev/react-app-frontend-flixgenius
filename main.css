@@ -1,7 +1,7 @@
 #app {
   width: 80%;
-  margin-right: 10%;
-  margin-left: 10%;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .infinite-list-item {
@@ -18,6 +18,21 @@
 }
 
 .infinite-list-item .rating {
-  position: relative;
-  top: 20;
+  float:right;
+  cursor: pointer;
+  margin-top: 1%;
+}
+
+.infinite-list-item img {
+  height: 192px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.fa-question-circle {
+  font-size: 1.5em;
+}
+
+.fa-question-circle:hover {
+  color: #f3ce00;
 }
