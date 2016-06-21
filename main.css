@@ -62,7 +62,7 @@ h1 {
   height: 40px;
 }
 
-.genre-group button:not(:last-child) {
+.genre-sort button:not(:nth-child(10)):not(:last-child) {
   border-right: 0px;
 }
 
