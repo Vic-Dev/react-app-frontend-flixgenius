@@ -13,12 +13,22 @@ class MovieBox extends React.Component {
 
   render() {
     var imdb;
+    var imdbRuntime;
+    var form;
+    var formTrue = false;
 
     if (this.props.rating) {
-      imdb = <a href={'http://www.imdb.com/title/' + this.props.imdbId} target="_blank"><strong>IMDB Rating: </strong>{this.props.rating}</a>;
+      imdb = <a href={'http://www.imdb.com/title/' + this.props.imdbId} target="_blank" className="imdb-link"><strong>IMDB Rating: </strong>{this.props.rating}</a>;
+      if (this.props.runtime) {
+        imdbRuntime = <span className="runtime">{this.props.runtime}min</span>;
+      }
     }
 
-    return <div className="infinite-list-item" style={
+    if (formTrue) {
+      form = <div className="toggle-form"><input type="text" /></div>;
+    }
+
+    return <div className="infinite-list-item" onload="document.body.style.opacity='1'" style={
       {
           height: this.props.height,
           lineHeight: this.props.lineHeight,
@@ -27,15 +37,20 @@ class MovieBox extends React.Component {
     }>
       <div style={{height: 400}}>
         <a href={'https://www.netflix.com/title/' + this.props.netflixId} target="_blank"><img src={this.props.imgUrl} alt={this.props.name} /></a>
-        <span className="rating">{imdb} <i className="fa fa-question-circle fa-lg" aria-hidden="true"></i></span>
-        <h2>{this.props.name}</h2>
-        <p>{this.props.year}</p>
-        <p>{this.props.description}</p>
+        <div className="item-content">
+          <span className="rating">{imdb} <i className="fa fa-question-circle fa-lg" aria-hidden="true" onClick={this._addForm}></i></span>{form}
+          <h2>{this.props.name}</h2>
+          <p>{this.props.year} {imdbRuntime}</p>
+          <p>{this.props.description}</p>
+        </div>
       </div>
-    </div>;
+    </div>
 
   }
   
+  _addForm = () => {
+    formTrue = true;
+  }
 }
 
 export default MovieBox;

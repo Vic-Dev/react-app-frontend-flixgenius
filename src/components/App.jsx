@@ -8,7 +8,7 @@ require('es6-promise').polyfill();
 require('isomorphic-fetch');
 var _ = require('lodash');
 
-const LIMIT = 6;
+const LIMIT = 8;
 const START = 0;
 
 var sort = 'title';
@@ -18,7 +18,7 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { elements: [], sort: 'title', order: 'asc', loading: false};
+    this.state = { elements: [], sort: 'title', order: 'asc', loading: false, mounted: false};
     this.getElements = this.getElements.bind(this);
   }
 
@@ -51,11 +51,11 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    // setInterval(() => {
-      this.getElements(START, LIMIT, this.state.sort, this.state.order);
-      // console.log(this);
-      var that = this;
-      // console.log(that);
+    this.setState({ mounted: true });
+    this.getElements(START, LIMIT, this.state.sort, this.state.order);
+    // console.log(this);
+    var that = this;
+    // console.log(that);
     window.addEventListener('scroll', _.debounce(that.handleScroll.bind(that, this.state.sort, this.state.order), 500));
   }
 
@@ -87,6 +87,7 @@ class App extends React.Component {
         netflixId={val.netflix_id}
         netflixGenres={val.netflix_genres}
         year={val.year}
+        runtime={val.imdb_runtime}
       />
     });
 

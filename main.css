@@ -5,10 +5,10 @@
 }
 
 .infinite-list-item {
-  width: 30%;
+  width: 24%;
   float: left;
-  margin-left: 1.5%;
-  margin-right: 1.5%;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
   margin-bottom: 2%;
 }
 
@@ -29,10 +29,39 @@
   width: 100%;
 }
 
+.infinite-list-item .runtime {
+  margin-left: 20px;
+}
+
+.infinite-list-item .imdb-link {
+  text-decoration: none;
+  background-color: black;
+  color: white;
+  padding: 1px;
+  border: 1px solid black;
+}
+
+.infinite-list-item .imdb-link:hover {
+  background-color: white;
+  color: black;
+}
+
+.item-content {
+  padding: 1%;
+}
+
 .fa-question-circle {
   font-size: 1.5em;
 }
 
 .fa-question-circle:hover {
   color: #f3ce00;
+}
+
+.toggle-form {
+    display: inline-block;
+    height: 400px;
+    width: 200px;
+    background-color: white;
+    position: absolute;
 }
