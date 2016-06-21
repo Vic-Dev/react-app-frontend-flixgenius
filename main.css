@@ -1,8 +1,123 @@
+body, button, h2, h3 {
+  font-family: 'Roboto', sans-serif;
+  color: #212121;
+}
+
+button, h2, h3 {
+  font-weight: 400;
+}
+
+button {
+  font-size: 0.75em;
+  outline:none;
+}
+
+h1 {
+  font-family: 'Raleway', sans-serif;
+}
+
 #app {
   width: 80%;
   margin-right: auto;
   margin-left: auto;
 }
+
+/* Header */
+.movie-tv-sort button, .genre-sort button, .sort button {
+  border: 1px solid #CDD3CE;
+  background-color: #FFF;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.movie-tv-sort button {
+  font-size: 1.5em;
+  width: 49%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.movie-tv-sort button:first-of-type {
+  margin-right: 1%;
+}
+
+.movie-tv-sort button:last-of-type {
+  margin-left: 1%;
+}
+
+.movie-tv-sort button:hover, .genre-sort button:hover, .sort button:hover {
+  background-color: #E7EDE8;
+}
+
+.genre-sort {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.genre-sort button {
+  width: 10%;
+  margin-bottom: 2px;
+  height: 40px;
+}
+
+.genre-group button:not(:last-child) {
+  border-right: 0px;
+}
+
+.sort {
+  display: flex;
+}
+
+.sort button {
+  align-self: flex-end;
+  height: 40px;
+}
+
+.sort button:not(:last-of-type) {
+  border-right: 0px;
+}
+
+.sort h2 {
+  margin-bottom: 0;
+}
+
+.sort #or {
+  width: 10%;
+  text-align: center;
+  align-self: center;
+}
+
+.type-sort {
+  width: 30%;
+  margin-left: 10%;
+}
+
+.type-sort h3, .emotion-sort h3 {
+  text-align: center;
+}
+
+.type-sort button {
+  width: 33.333%;
+}
+
+.emotion-sort {
+  width: 50%;
+  margin-left: 10%;
+}
+
+.emotion-sort button {
+  width: 20%;
+}
+
+/* AppBody */
+
+.container {
+  margin-top: 50px;
+}
+
+/* MovieBox */
 
 .infinite-list-item {
   width: 24%;
@@ -35,33 +150,53 @@
 
 .infinite-list-item .imdb-link {
   text-decoration: none;
-  background-color: black;
+  background-color: #3C363E;
   color: white;
-  padding: 1px;
-  border: 1px solid black;
+  padding: 1px 2px 1px 2px;
+  border: 1px solid #3C363E;
 }
 
 .infinite-list-item .imdb-link:hover {
   background-color: white;
-  color: black;
+  color: #3C363E;
 }
 
 .item-content {
   padding: 1%;
 }
 
-.fa-question-circle {
+.item-content {
+  font-weight: 300;
+}
+
+.item-content h2 {
+  font-size: 1.4em;
+}
+
+.item-content p:first-of-type {
+  margin-top: 0;
+}
+
+.item-content p {
+  font-size: 0.9em;
+}
+
+.fa-pencil {
   font-size: 1.5em;
 }
 
-.fa-question-circle:hover {
-  color: #f3ce00;
+.fa-pencil:hover {
+  color: #D8B95D;
 }
 
 .toggle-form {
-    display: inline-block;
-    height: 400px;
-    width: 200px;
-    background-color: white;
-    position: absolute;
+  display: inline-block;
+  height: 400px;
+  width: 200px;
+  background-color: white;
+  position: absolute;
+}
+
+button.button-active {
+  background-color: #E7EDE8;
 }

@@ -17,6 +17,19 @@ class MovieBox extends React.Component {
     var form;
     var formTrue = false;
 
+    // const imdbForm = this.state.loading 
+    // ? <div>...loading</div>
+    // : this.props.map(val => {
+    //   return <ImdbForm 
+    //   key={val.id} 
+    //   name={val.title}
+    //   netflixId={val.netflix_id}
+    //   year={val.year}
+    //   />
+    // });
+
+    var genres = this.props.netflixGenres.join(", ");
+
     if (this.props.rating) {
       imdb = <a href={'http://www.imdb.com/title/' + this.props.imdbId} target="_blank" className="imdb-link"><strong>IMDB Rating: </strong>{this.props.rating}</a>;
       if (this.props.runtime) {
@@ -38,10 +51,12 @@ class MovieBox extends React.Component {
       <div style={{height: 400}}>
         <a href={'https://www.netflix.com/title/' + this.props.netflixId} target="_blank"><img src={this.props.imgUrl} alt={this.props.name} /></a>
         <div className="item-content">
-          <span className="rating">{imdb} <i className="fa fa-question-circle fa-lg" aria-hidden="true" onClick={this._addForm}></i></span>{form}
+          <span className="rating">{imdb} <i className="fa fa-pencil fa-lg" aria-hidden="true" onClick={this._addForm}></i></span>{form}
           <h2>{this.props.name}</h2>
           <p>{this.props.year} {imdbRuntime}</p>
+          <p>{genres}</p>
           <p>{this.props.description}</p>
+
         </div>
       </div>
     </div>
