@@ -14,11 +14,21 @@ const START = 0;
 var sort = 'title';
 var order = 'asc';
 
+var startState = {
+  elements: [],
+  sort: 'title',
+  order: 'asc',
+  loading: false,
+  mounted: false,
+  movieTvSortSelected: undefined,
+  genreSelected: undefined
+}
+
 class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { elements: [], sort: 'title', order: 'asc', loading: false, mounted: false, movieTvSortSelected: undefined, genreSelected: undefined};
+    this.state = { elements: startState.elements, sort: startState.sort, order: startState.order, loading: startState.loading, mounted: startState.mounted, movieTvSortSelected: startState.movieTvSortSelected, genreSelected: startState.genreSelected};
     this.getElements = this.getElements.bind(this);
   }
 
@@ -101,18 +111,51 @@ class App extends React.Component {
 
     const genres = ['Action and Adventure', 'Anime', 'Canadian', 'Children and Family', 'Classic', 'Comedies', 'Documentaries', 'Dramas', 'Faith and Spirituality', 'Gay and Lesbian', 'Horror', 'Independent', 'International', 'Romantic', 'Sci-Fi and Fantasy', 'Sports', 'Sports and Fitness', 'Thrillers', 'Music', 'Musicals']
 
-    const genresDisplay = genres.map(val => {
-      const classes = this.state.genreSelected === val
-      ? 'button-active'
-      : '';
+    const sortBy = [
+    {
+      name: 'IMDB Rating',
+      sort: 'imdb_rating',
+      order: 'desc'
+    },
+    {
+      name: 'Title',
+      sort: 'title',
+      order: 'asc'
+    },
+    {
+      name: 'Year',
+      sort: 'year',
+      order: 'desc'
+    }
+    ]
 
-      return (<button
-        onClick={this._genreSelectedClick.bind(this, val)}
-        className={ classes }
-        >
-        {val}
-        </button>)
-    });
+    const sortByEmotion = [
+    {
+      name: 'Anger',
+      sort: 'anger',
+      order: 'desc'
+    },
+    {
+      name: 'Disgust',
+      sort: 'disgust',
+      order: 'desc'
+    },
+    {
+      name: 'Fear',
+      sort: 'fear',
+      order: 'desc'
+    },
+    {
+      name: 'Joy',
+      sort: 'joy',
+      order: 'desc'
+    },
+    {
+      name: 'Sadness',
+      sort: 'sadness',
+      order: 'desc'
+    }
+    ]
 
     const typeSortDisplay = typeSortButton.map(val => {
       const classes = this.state.movieTvSortSelected === val
@@ -127,14 +170,53 @@ class App extends React.Component {
         </button>)
     });
 
-    const buttonToRender = this.state.filtered
-    ? <button onClick={this._clearFilter}>Clear filter</button>
-    : <button onClick={this._hideRatings}>Hide Ratings under 9</button>
+    const genresDisplay = genres.map(val => {
+      const classes = this.state.genreSelected === val
+      ? 'button-active'
+      : '';
+
+      return (<button
+        onClick={this._genreSelectedClick.bind(this, val)}
+        className={ classes }
+        >
+        {val}
+        </button>)
+    });
+
+    const sortByDisplay = sortBy.map(val => {
+      const classes = this.state.sort === val.sort
+      ? 'button-active'
+      : '';
+
+      return (<button
+        onClick={this._sortBy.bind(this, val.sort, val.order)}
+        className={ classes }
+        >
+        {val.name}
+        </button>)
+    })
+
+    const sortByEmotionDisplay = sortByEmotion.map(val => {
+      const classes = this.state.sort === val.sort
+      ? 'button-active'
+      : '';
+
+      return (<button
+        onClick={this._sortBy.bind(this, val.sort, val.order)}
+        className={ classes }
+        >
+        {val.name}
+        </button>)
+    })
+
+    // const buttonToRender = this.state.filtered
+    // ? <button onClick={this._clearFilter}>Clear filter</button>
+    // : <button onClick={this._hideRatings}>Hide Ratings under 9</button>
 
     return (
       <div classname="app">
         <Header>
-          <h1>Flixgenius</h1>
+          <h1 onClick={this._resetSort}>Flixgenius</h1>
           <div className="movie-tv-sort">
             {typeSortDisplay}
           </div>
@@ -144,17 +226,11 @@ class App extends React.Component {
           <div className="sort">
             <div className="type-sort">
               <h3> Sort By:</h3>
-              <button onClick={this._sortByRating}>IMDB rating</button>
-              <button onClick={this._sortByTitle}>Title</button>
-              <button onClick={this._sortByYear}>Year</button>
+              {sortByDisplay}
             </div>
             <div className="emotion-sort">
               <h3>Sort By Emotion:</h3>
-              <button onClick={this._sortByAnger}>Anger</button>
-              <button onClick={this._sortByDisgust}>Disgust</button>
-              <button onClick={this._sortByFear}>Fear</button>
-              <button onClick={this._sortByJoy}>Joy</button>
-              <button onClick={this._sortBySadness}>Sadness</button>
+              {sortByEmotionDisplay}
             </div>
           </div>
         </Header>
@@ -163,52 +239,9 @@ class App extends React.Component {
     )
   };
 
-  _sortByRating = (e) => {
-    e.preventDefault();
-    this.changeState('imdb_rating', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
-    this.getElements(START, LIMIT, 'imdb_rating', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
-  }
-
-  _sortByTitle = (e) => {
-    e.preventDefault();
-    this.changeState('title', 'asc', this.state.movieTvSortSelected, this.state.genreSelected);
-    this.getElements(START, LIMIT, 'title', 'asc', this.state.movieTvSortSelected, this.state.genreSelected);
-  }
-
-  _sortByYear = (e) => {
-    e.preventDefault();
-    this.changeState('year', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
-    this.getElements(START, LIMIT, 'year', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
-  }
-
-  _sortByAnger = (e) => {
-    e.preventDefault();
-    this.changeState('anger', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
-    this.getElements(START, LIMIT, 'anger', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
-  }
-
-  _sortByDisgust = (e) => {
-    e.preventDefault();
-    this.changeState('disgust', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
-    this.getElements(START, LIMIT, 'disgust', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);    
-  }
-
-  _sortByFear = (e) => {
-    e.preventDefault();
-    this.changeState('fear', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
-    this.getElements(START, LIMIT, 'fear', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);    
-  }
-
-  _sortByJoy = (e) => {
-    e.preventDefault();
-    this.changeState('joy', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
-    this.getElements(START, LIMIT, 'joy', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);    
-  }
-
-  _sortBySadness = (e) => {
-    e.preventDefault();
-    this.changeState('sadness', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
-    this.getElements(START, LIMIT, 'sadness', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);    
+  _sortBy = (sort, order) => {
+    this.changeState(sort, order, this.state.movieTvSortSelected, this.state.genreSelected);
+    this.getElements(START, LIMIT, sort, order, this.state.movieTvSortSelected, this.state.genreSelected);
   }
 
   _genreSelectedClick = (selected) => {
@@ -221,18 +254,10 @@ class App extends React.Component {
     this.getElements(START, LIMIT, this.state.sort, this.state.order, selected, this.state.genreSelected);
   }
 
-  _hideRatings = () => {
-    const newState = this.state.elements.filter(val => val.rating > 9);
-    this.setState({
-      filtered: true
-    });
-  };
-
-  _clearFilter = () => {
-    this.setState({
-      filtered: false
-    });
-  };
+  _resetSort = () => {
+    this.changeState(startState.sort, startState.order, startState.movieTvSortSelected, startState.genreSelected);
+    this.getElements(START, LIMIT, startState.sort, startState.order, startState.movieTvSortSelected, startState.genreSelected);
+  }
 
 }
 
