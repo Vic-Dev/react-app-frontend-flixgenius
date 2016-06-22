@@ -18,15 +18,19 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { elements: [], sort: 'title', order: 'asc', loading: false, mounted: false, genreSelected: null, movieTvSortSelected: null};
+    this.state = { elements: [], sort: 'title', order: 'asc', loading: false, mounted: false, movieTvSortSelected: undefined, genreSelected: undefined};
     this.getElements = this.getElements.bind(this);
   }
 
-  getElements(start, limit, sort, order) {
+  getElements(start, limit, sort, order, moviesOrTv, genre) {
     var that = this;
     // console.log(this.state.sort);
     // console.log(that);
-    fetch('http://localhost:3000/flicks?start=' + start + '&limit=' + limit + '&sort=' + sort + '&order=' + order)
+    // console.log(this.state);
+    console.log(moviesOrTv);
+    var search = 'http://localhost:3000/flicks?start=' + start + '&limit=' + limit + '&sort=' + sort + '&order=' + order + '&moviesOrTv=' + moviesOrTv + '&genre=' + genre ;
+    console.log(search);
+    fetch(search)
     .then(function(response) {
       if (response.status >= 400) {
         throw new Error("Bad response from server");
@@ -34,35 +38,37 @@ class App extends React.Component {
       return response.json();
     })
     .then(function(flicks) {
-      console.log(flicks);
-      console.log(sort);
+      // console.log(flicks);
+      // console.log(sort);
       that.setState({loading: false, elements: that.state.elements.concat(flicks)})
     });
   }
 
-  changeState(sort, order) {
-    console.log(sort);
+  changeState(sort, order, movieTvSortSelected, genreSelected) {
+    // console.log(sort);
     this.setState({
       elements: [],
       sort: sort, 
       order: order, 
-      loading: true
+      loading: true,
+      movieTvSortSelected: movieTvSortSelected,
+      genreSelected: genreSelected
     });
   }
 
   componentDidMount() {
     this.setState({ mounted: true });
-    this.getElements(START, LIMIT, this.state.sort, this.state.order);
+    this.getElements(START, LIMIT, this.state.sort, this.state.order, this.state.movieTvSortSelected, this.state.genreSelected);
     // console.log(this);
     var that = this;
     // console.log(that);
-    window.addEventListener('scroll', _.debounce(that.handleScroll.bind(that, this.state.sort, this.state.order), 500));
+    window.addEventListener('scroll', _.debounce(that.handleScroll.bind(that, this.state.sort, this.state.order, this.state.movieTvSortSelected, this.state.genreSelected), 500));
   }
 
   handleScroll(sort, order){
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
         const elemLength = this.state.elements.length;
-        this.getElements(elemLength, LIMIT, this.state.sort, this.state.order);
+        this.getElements(elemLength, LIMIT, this.state.sort, this.state.order, this.state.movieTvSortSelected, this.state.genreSelected);
       }
   }
 
@@ -93,7 +99,7 @@ class App extends React.Component {
 
     const typeSortButton = ['Movies', 'TV Shows']
 
-    const genres = ['Action & Adventure', 'Anime', 'Canadian', 'Children & Family', 'Classic', 'Comedies', 'Documentaries', 'Dramas', 'Faith & Spirituality', 'Gay & Lesbian', 'Horror', 'Independent', 'International', 'Romantic', 'Sci-Fi & Fantasy', 'Sports', 'Sports & Fitness', 'Thrillers', 'Music', 'Musicals']
+    const genres = ['Action and Adventure', 'Anime', 'Canadian', 'Children and Family', 'Classic', 'Comedies', 'Documentaries', 'Dramas', 'Faith and Spirituality', 'Gay and Lesbian', 'Horror', 'Independent', 'International', 'Romantic', 'Sci-Fi and Fantasy', 'Sports', 'Sports and Fitness', 'Thrillers', 'Music', 'Musicals']
 
     const genresDisplay = genres.map(val => {
       const classes = this.state.genreSelected === val
@@ -101,7 +107,7 @@ class App extends React.Component {
       : '';
 
       return (<button
-        onClick={this._click.bind(this, val)}
+        onClick={this._genreSelectedClick.bind(this, val)}
         className={ classes }
         >
         {val}
@@ -159,62 +165,60 @@ class App extends React.Component {
 
   _sortByRating = (e) => {
     e.preventDefault();
-    this.changeState('imdb_rating', 'desc');
-    this.getElements(START, LIMIT, 'imdb_rating', 'desc');
+    this.changeState('imdb_rating', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
+    this.getElements(START, LIMIT, 'imdb_rating', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
   }
 
   _sortByTitle = (e) => {
     e.preventDefault();
-    this.changeState('title', 'asc');
-    this.getElements(START, LIMIT, 'title', 'asc');
+    this.changeState('title', 'asc', this.state.movieTvSortSelected, this.state.genreSelected);
+    this.getElements(START, LIMIT, 'title', 'asc', this.state.movieTvSortSelected, this.state.genreSelected);
   }
 
   _sortByYear = (e) => {
     e.preventDefault();
-    this.changeState('year', 'desc');
-    this.getElements(START, LIMIT, 'year', 'desc');
+    this.changeState('year', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
+    this.getElements(START, LIMIT, 'year', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
   }
 
   _sortByAnger = (e) => {
     e.preventDefault();
-    this.changeState('anger', 'desc');
-    this.getElements(START, LIMIT, 'anger', 'desc');
+    this.changeState('anger', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
+    this.getElements(START, LIMIT, 'anger', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
   }
 
   _sortByDisgust = (e) => {
     e.preventDefault();
-    this.changeState('disgust', 'desc');
-    this.getElements(START, LIMIT, 'disgust', 'desc');    
+    this.changeState('disgust', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
+    this.getElements(START, LIMIT, 'disgust', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);    
   }
 
   _sortByFear = (e) => {
     e.preventDefault();
-    this.changeState('fear', 'desc');
-    this.getElements(START, LIMIT, 'fear', 'desc');    
+    this.changeState('fear', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
+    this.getElements(START, LIMIT, 'fear', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);    
   }
 
   _sortByJoy = (e) => {
     e.preventDefault();
-    this.changeState('joy', 'desc');
-    this.getElements(START, LIMIT, 'joy', 'desc');    
+    this.changeState('joy', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
+    this.getElements(START, LIMIT, 'joy', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);    
   }
 
   _sortBySadness = (e) => {
     e.preventDefault();
-    this.changeState('sadness', 'desc');
-    this.getElements(START, LIMIT, 'sadness', 'desc');    
+    this.changeState('sadness', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);
+    this.getElements(START, LIMIT, 'sadness', 'desc', this.state.movieTvSortSelected, this.state.genreSelected);    
   }
 
-  _click = (selected) => {
-    this.setState({
-      genreSelected: selected
-    })
+  _genreSelectedClick = (selected) => {
+    this.changeState(this.state.sort, this.state.order, this.state.movieTvSortSelected, selected);
+    this.getElements(START, LIMIT, this.state.sort, this.state.order, this.state.movieTvSortSelected, selected);
   }
 
   _movieTvSortClick = (selected) => {
-    this.setState({
-      movieTvSortSelected: selected
-    })
+    this.changeState(this.state.sort, this.state.order, selected, this.state.genreSelected);
+    this.getElements(START, LIMIT, this.state.sort, this.state.order, selected, this.state.genreSelected);
   }
 
   _hideRatings = () => {
