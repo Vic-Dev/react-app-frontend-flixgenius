@@ -91,7 +91,7 @@ h1 {
 }
 
 .type-sort {
-  width: 30%;
+  width: 40%;
   margin-left: 10%;
 }
 
@@ -100,7 +100,7 @@ h1 {
 }
 
 .type-sort button {
-  width: 33.333%;
+  width: 25%;
 }
 
 .emotion-sort {
@@ -184,6 +184,10 @@ h1 {
 
 .fa-pencil {
   font-size: 1.5em;
+  float: right;
+  margin-left: 1%;
+  margin-top: 1%;
+  position: relative;
 }
 
 .fa-pencil:hover {
@@ -200,4 +204,29 @@ h1 {
 
 button.button-active {
   background-color: #E7EDE8;
+}
+
+.form {
+  position: absolute;
+  width: 273px;
+  height: 190px;
+  background-color: #eee;
+  transform: translateY(-190px);
+  z-index: -1;
+  transition: z-index 0.5s step-start, transform 0.5s linear;
+}
+
+.form.active {
+  transform: translateY(0);
+  z-index: 0;
+  transition: z-index 0.5s step-end, transform 0.5s linear;
+}
+
+.form .container {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.form .container button {
+  float: right;
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import AppBody from './AppBody.jsx';
 import Header from './Header.jsx';
 import MovieBox from './MovieBox.jsx';
+import ImdbForm from './ImdbForm.jsx';
 import Infinite from 'react-infinite';
 
 require('es6-promise').polyfill();
@@ -16,8 +17,8 @@ var order = 'asc';
 
 var startState = {
   elements: [],
-  sort: 'title',
-  order: 'asc',
+  sort: 'availability',
+  order: 'desc',
   loading: false,
   mounted: false,
   movieTvSortSelected: undefined,
@@ -34,9 +35,6 @@ class App extends React.Component {
 
   getElements(start, limit, sort, order, moviesOrTv, genre) {
     var that = this;
-    // console.log(this.state.sort);
-    // console.log(that);
-    // console.log(this.state);
     console.log(moviesOrTv);
     var search = 'http://localhost:3000/flicks?start=' + start + '&limit=' + limit + '&sort=' + sort + '&order=' + order + '&moviesOrTv=' + moviesOrTv + '&genre=' + genre ;
     console.log(search);
@@ -48,8 +46,6 @@ class App extends React.Component {
       return response.json();
     })
     .then(function(flicks) {
-      // console.log(flicks);
-      // console.log(sort);
       that.setState({loading: false, elements: that.state.elements.concat(flicks)})
     });
   }
@@ -69,9 +65,7 @@ class App extends React.Component {
   componentDidMount() {
     this.setState({ mounted: true });
     this.getElements(START, LIMIT, this.state.sort, this.state.order, this.state.movieTvSortSelected, this.state.genreSelected);
-    // console.log(this);
     var that = this;
-    // console.log(that);
     window.addEventListener('scroll', _.debounce(that.handleScroll.bind(that, this.state.sort, this.state.order, this.state.movieTvSortSelected, this.state.genreSelected), 500));
   }
 
@@ -112,6 +106,11 @@ class App extends React.Component {
     const genres = ['Action and Adventure', 'Anime', 'Canadian', 'Children and Family', 'Classic', 'Comedies', 'Documentaries', 'Dramas', 'Faith and Spirituality', 'Gay and Lesbian', 'Horror', 'Independent', 'International', 'Romantic', 'Sci-Fi and Fantasy', 'Sports', 'Sports and Fitness', 'Thrillers', 'Music', 'Musicals']
 
     const sortBy = [
+    {
+      name: 'New Arrivals',
+      sort: 'availability',
+      order: 'desc'
+    },
     {
       name: 'IMDB Rating',
       sort: 'imdb_rating',
@@ -245,11 +244,17 @@ class App extends React.Component {
   }
 
   _genreSelectedClick = (selected) => {
+    if (this.state.genreSelected == selected) {
+      selected = undefined;
+    }
     this.changeState(this.state.sort, this.state.order, this.state.movieTvSortSelected, selected);
     this.getElements(START, LIMIT, this.state.sort, this.state.order, this.state.movieTvSortSelected, selected);
   }
 
   _movieTvSortClick = (selected) => {
+    if (this.state.movieTvSortSelected == selected) {
+      selected = undefined;
+    }
     this.changeState(this.state.sort, this.state.order, selected, this.state.genreSelected);
     this.getElements(START, LIMIT, this.state.sort, this.state.order, selected, this.state.genreSelected);
   }
