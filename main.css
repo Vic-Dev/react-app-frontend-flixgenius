@@ -8,7 +8,7 @@ button, h2, h3 {
 }
 
 button {
-  font-size: 0.75em;
+  font-size: 0.9em;
   outline:none;
 }
 
@@ -60,7 +60,7 @@ h1 {
 .genre-sort button {
   width: 10%;
   margin-bottom: 2px;
-  height: 40px;
+  height: 48px;
 }
 
 .genre-sort button:not(:nth-child(10)):not(:last-child) {
@@ -73,7 +73,7 @@ h1 {
 
 .sort button {
   align-self: flex-end;
-  height: 40px;
+  height: 48px;
 }
 
 .sort button:not(:last-of-type) {
@@ -92,7 +92,7 @@ h1 {
 
 .type-sort {
   width: 40%;
-  margin-left: 10%;
+  margin-left: 4%;
 }
 
 .type-sort h3, .emotion-sort h3 {
@@ -197,7 +197,7 @@ h1 {
 .toggle-form {
   display: inline-block;
   height: 400px;
-  width: 200px;
+  width: 100%;
   background-color: white;
   position: absolute;
 }
@@ -208,18 +208,20 @@ button.button-active {
 
 .form {
   position: absolute;
-  width: 273px;
+  width: 19%;
   height: 190px;
   background-color: #eee;
+  opacity: 0;
   transform: translateY(-190px);
   z-index: -1;
-  transition: z-index 0.5s step-start, transform 0.5s linear;
+  transition: z-index 0.2s step-start, transform 0.2s linear, opacity .2s ease-in-out;;
 }
 
 .form.active {
+  opacity: 1;
   transform: translateY(0);
   z-index: 0;
-  transition: z-index 0.5s step-end, transform 0.5s linear;
+  transition: z-index 0.2s step-end, transform 0.2s linear;
 }
 
 .form .container {
