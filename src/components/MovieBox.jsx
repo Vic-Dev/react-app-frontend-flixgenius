@@ -2,6 +2,8 @@ import React from 'react';
 import ImdbForm from './ImdbForm.jsx';
 import Infinite from 'react-infinite';
 
+var ReactTooltip = require("react-tooltip")
+
 class MovieBox extends React.Component {
 
   constructor(props) {
@@ -9,7 +11,9 @@ class MovieBox extends React.Component {
     this.state = {
       height: 400,
       lineHeight: '400px',
-      rating: null
+      rating: null,
+      imdbId: null,
+      imdbVotes: null
     }
   }
 
@@ -28,8 +32,12 @@ class MovieBox extends React.Component {
 
     const ratingUpdate = this.state.rating || this.props.rating
 
+    const imdbIdUpdate = this.state.imdbId || this.props.imdbId
+
+    const imdbVotes = this.state.imdbVotes || this.props.imdbVotes
+
     if (this.state.rating || this.props.rating) {
-      imdb = <a href={'http://www.imdb.com/title/' + this.props.imdbId} target="_blank" className="imdb-link"><strong>IMDB Rating: </strong>{ ratingUpdate }</a>;
+      imdb = <a href={'http://www.imdb.com/title/' + imdbIdUpdate} target="_blank" className="imdb-link"><strong>IMDB Rating: </strong>{ ratingUpdate }</a>;
       if (this.props.runtime) {
         imdbRuntime = <span className="runtime">{this.props.runtime}min</span>;
       }
@@ -46,7 +54,8 @@ class MovieBox extends React.Component {
         <a href={'https://www.netflix.com/title/' + this.props.netflixId} target="_blank"><img src={this.props.imgUrl} alt={this.props.name} /></a>
         {imdbForm}
         <div className="item-content">
-          <span className="rating">{imdb}</span>
+          <span className="rating" data-tip={"Votes: " + imdbVotes}>{imdb}</span>
+          <ReactTooltip place="top" type="dark" effect="float"/>
           <h2>{this.props.name}</h2>
           <p>{this.props.year} {imdbRuntime}</p>
           <p>{genres}</p>
@@ -56,9 +65,11 @@ class MovieBox extends React.Component {
     </div>)
   };
 
-  _updateRating = (rating) => {
+  _updateRating = (rating, imdbId, imdbVotes) => {
     this.setState({
-      rating: rating
+      rating: rating,
+      imdbId: imdbId,
+      imdbVotes: imdbVotes
     })
     console.log(this.state.rating);
     this.forceUpdate();

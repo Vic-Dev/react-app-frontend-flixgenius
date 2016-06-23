@@ -9,7 +9,7 @@ require('es6-promise').polyfill();
 require('isomorphic-fetch');
 var _ = require('lodash');
 
-const LIMIT = 8;
+const LIMIT = 12;
 const START = 0;
 
 var sort = 'title';
@@ -94,6 +94,7 @@ class App extends React.Component {
         description={val.netflix_description} 
         rating={val.imdb_rating}
         imdbId={val.imdb_id}
+        imdbVotes={val.imdb_votes}
         netflixId={val.netflix_id}
         netflixGenres={val.netflix_genres}
         year={val.year}

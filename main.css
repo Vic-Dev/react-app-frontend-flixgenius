@@ -214,7 +214,7 @@ button.button-active {
   opacity: 0;
   transform: translateY(-190px);
   z-index: -1;
-  transition: z-index 0.2s step-start, transform 0.2s linear, opacity .2s ease-in-out;;
+  transition: z-index 0.2s step-start, transform 0.2s linear, opacity 0.2s ease-in-out;;
 }
 
 .form.active {

@@ -59,9 +59,9 @@ class ImdbForm extends React.Component {
       }
       return response.json();
     })
-    .then(function(rating) {
+    .then(function(response) {
       // console.log(rating);
-      that.props.updateRating(rating);
+      that.props.updateRating(response.rating, imdbId, response.votes);
     });
   }
 
