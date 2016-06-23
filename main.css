@@ -1,6 +1,7 @@
 body, button, h2, h3 {
   font-family: 'Roboto', sans-serif;
   color: #212121;
+  margin: 0;
 }
 
 button, h2, h3 {
@@ -15,15 +16,34 @@ button {
 h1 {
   font-family: 'Raleway', sans-serif;
   cursor: pointer;
-}
-
-#app {
-  width: 80%;
-  margin-right: auto;
-  margin-left: auto;
+  display: inline-block;
 }
 
 /* Header */
+.logo {
+  background: white;
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+  height: 75px;
+  padding-left: 100px;
+  background-color: #E7EDE8;
+}
+
+.up-arrow {
+  position: fixed;
+  top: 10;
+  left: 48.2%;
+  transform: rotate(90deg);
+}
+
+.search-opts, .container {
+  position: relative;
+  top: 85;
+  width: 80%;
+  margin: auto;
+}
+
 .movie-tv-sort button, .genre-sort button, .sort button {
   border: 1px solid #CDD3CE;
   background-color: #FFF;
@@ -114,7 +134,7 @@ h1 {
 
 /* AppBody */
 
-.container {
+.container, .small-container {
   margin-top: 50px;
 }
 
@@ -208,7 +228,7 @@ button.button-active {
 
 .form {
   position: absolute;
-  width: 19%;
+  width: 24%;
   height: 190px;
   background-color: #eee;
   opacity: 0;
@@ -224,11 +244,11 @@ button.button-active {
   transition: z-index 0.2s step-end, transform 0.2s linear;
 }
 
-.form .container {
+.form .small-container {
   padding-left: 8px;
   padding-right: 8px;
 }
 
-.form .container button {
+.form .small-container button {
   float: right;
 }

@@ -26,7 +26,7 @@ class ImdbForm extends React.Component {
     return (
       <div className="imdbForm">
         <div className={classes}>
-          <div className="container">
+          <div className="small-container">
           <h3>No IMDB rating, or broken link?</h3>
           Submit IMDB link: <input type="text" name="title" value={this.state.value}
           onChange={this.handleChange.bind(this)} />

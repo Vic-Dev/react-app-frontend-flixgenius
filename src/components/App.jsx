@@ -5,6 +5,8 @@ import MovieBox from './MovieBox.jsx';
 import ImdbForm from './ImdbForm.jsx';
 import Infinite from 'react-infinite';
 
+var ScrollToTop = require("react-scroll-up")
+
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 var _ = require('lodash');
@@ -216,21 +218,28 @@ class App extends React.Component {
     return (
       <div classname="app">
         <Header>
-          <h1 onClick={this._resetSort}>Flixgenius</h1>
-          <div className="movie-tv-sort">
-            {typeSortDisplay}
+          <div className="logo">
+            <h1 onClick={this._resetSort}>Flixgenius</h1>
+            <ScrollToTop showUnder={160}>
+            <span className="up-arrow"><img src="http://image.flaticon.com/icons/svg/60/60573.svg" width="50" height="50" alt="Up arrow free icon" title="Up arrow free icon" /></span>
+            </ScrollToTop>
           </div>
-          <div className="genre-sort">          
-            {genresDisplay}
-          </div>
-          <div className="sort">
-            <div className="type-sort">
-              <h3> Sort By:</h3>
-              {sortByDisplay}
+          <div className="search-opts">
+            <div className="movie-tv-sort">
+              {typeSortDisplay}
             </div>
-            <div className="emotion-sort">
-              <h3>Sort By Emotion:</h3>
-              {sortByEmotionDisplay}
+            <div className="genre-sort">          
+              {genresDisplay}
+            </div>
+            <div className="sort">
+              <div className="type-sort">
+                <h3> Sort By:</h3>
+                {sortByDisplay}
+              </div>
+              <div className="emotion-sort">
+                <h3>Sort By Emotion:</h3>
+                {sortByEmotionDisplay}
+              </div>
             </div>
           </div>
         </Header>
